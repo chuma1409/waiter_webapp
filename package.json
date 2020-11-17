@@ -1,0 +1,31 @@
+{
+  "name": "waiter_webapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-handlebars": "^5.2.0",
+    "express-session": "^1.17.1",
+    "node": "^15.2.0",
+    "nodemon": "^2.0.6",
+    "pg": "^8.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chuma1409/waiter_webapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chuma1409/waiter_webapp/issues"
+  },
+  "homepage": "https://github.com/chuma1409/waiter_webapp#readme"
+}

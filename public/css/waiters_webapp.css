@@ -1,0 +1,25 @@
+.container {
+	margin: auto;
+	width: 80%;
+	background-color: bisque;
+	text-align-last: center;
+}
+body {
+	font-family: arial;
+	color:black;
+	background-color: burlywood;
+  }
+  input[type="text"] {
+	width: 15em;
+	padding: 0.5em;
+	margin-bottom: 2em;
+	margin-top: 2em;
+
+  }
+  input[type="submit"] {
+	width: 15em;
+	padding: 0.5em;
+	margin-bottom: 2em;
+	margin-top: 2em;
+
+  }
