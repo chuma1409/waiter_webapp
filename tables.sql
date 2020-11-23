@@ -1,16 +1,15 @@
  create table users(
-    id serial primary key,
-    username text not null,
-    user_type text not null
+    id serial not null primary key,
+    username text  
 );
 create table days(
-    id serial primary key,
+    id serial not null primary key,
     chosen_day text not null
 );
 create table availability(
-    id serial primary key,
-    id_user int,
-    id_days int,
+    id serial not null primary key,
+    id_user int not null,
+    id_days int not null,
     FOREIGN KEY(id_user) REFERENCES users(id),
     FOREIGN KEY(id_days) REFERENCES days(id)
 );

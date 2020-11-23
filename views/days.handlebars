@@ -1,0 +1,29 @@
+   <h1>Waiters App</h1>
+   
+  
+    <a href="/"><button type="button" class="backBtn">Back</button></a>
+    <form action="/days" method="post">
+    <div class="tables">
+ <table>
+    <thead>
+  <tr>
+     {{#each allDays}}
+    <th>{{this.chosen_day}}</th>
+    {{/each}}
+  </tr>
+    </thead>
+    <tbody>
+       <tr>
+             {{#each allDays}}
+             <td>
+                {{#each allNames}}
+                {{this.username}}
+                {{/each}}
+             </td>
+             {{/each}}
+       </tr>
+    </tbody>
+
+</table>
+</div>
+</form>

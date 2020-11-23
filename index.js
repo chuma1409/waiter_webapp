@@ -37,45 +37,63 @@ app.use(session({
 // initialise the flash middleware
 app.use(flash());
 app.get("/", async function(req, res){
-    res.render('index');
+  var allDays = await waiters.getDays()
+    res.render('waiters', {
+      allDays
+    });
 });
-app.get("/waiter", async function(){
- 
-})
-app.post("/waiters", async function(req,res){
+app.get("/waiters/:username", async function(req, res){
+  
+  const name =  req.params.username
+  const days =  req.body.days
+  
+
 
  
-    const name =  req.body.userName
+ var waiter = await waiters.addWaiter(name);
+// console.log(waiter);
+  // var day = await waiters.selectWorkingDays(name, days);
+const allDays = await waiters.getDays()
+  res.render('waiters', {
+    // day,
+       waiter: waiter,
+    //  days:day,
+     allDays
+  })
+
+}) 
+
+app.post("/waiters/:username", async function(req,res){
+
+ 
+    const name =  req.params.username
     const days =  req.body.days
-    
-  
-    // req.flash('info', 'Flash Message Added');
-if(!name && !days){
-req.flash('errMsg','please enter your name and select 3 desired working days ')
-}
-else if(!days){
-  req.flash('errMsg','please select 3 workig days')
-}
-else if(!name){
-  req.flash('errMsg','please enter your name')
-}
-else if(isNaN(name) === false ){
-    req.flash('errMsg','name should not be a number')
-}
-else {
-    console.log(isNaN(name));
-  await waiters.addWaiter(name, days);
-   var waiter = await waiters.addWaiter(name);
-}
-    res.render('index', {
-        waiter: waiter
-  
+
+ var waiter = await waiters.addWaiter(name);
+// var waiterId = await waiters.nameId(name);
+
+var day = await waiters.selectWorkingDays(name, days);
+var allDays = await waiters.getDays()
+
+    res.render('waiters', {
+        username: waiter,
+       day,
+       allDays
     })
   
 })
 
 
-app.post("/days", async function(){
+app.get("/days", async function(req, res){
+
+  var allNames = await waiters.tablesJoined()
+var allDays = await waiters.getDays()
+
+  res.render('days', {
+    allNames,
+    allDays
+ 
+  })
 
 })
 

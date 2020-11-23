@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>WAITERS APP</h1>
+    <form action="/waiters/{{username}}" method="POST">
+
+ <div class="errMsg">{{messages.errMsg}}</div>
+ <div class="checkbox">
+
+{{#each allDays}}
+
+    <input type="checkbox" name="days" value="{{this.chosen_day}}">
+    <span>{{this.chosen_day}}</span>
+
+    {{/each}}
+  
+    
+</div>
+  <input type="submit" value="Submit" class="btn">
+
+    </form>
+  
+</div>
+  
