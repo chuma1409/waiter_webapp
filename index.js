@@ -37,27 +37,19 @@ app.use(session({
 // initialise the flash middleware
 app.use(flash());
 app.get("/", async function(req, res){
-  var allDays = await waiters.getDays()
+  // var allDays = await waiters.getDays()
     res.render('waiters', {
-      allDays
+      // allDays
     });
 });
 app.get("/waiters/:username", async function(req, res){
   
   const name =  req.params.username
-  const days =  req.body.days
-  
-
-
+  //  const days =  req.body.days
  
- var waiter = await waiters.addWaiter(name);
-// console.log(waiter);
-  // var day = await waiters.selectWorkingDays(name, days);
-const allDays = await waiters.getDays()
+const allDays = await waiters.chosenDays(name)
   res.render('waiters', {
-    // day,
-       waiter: waiter,
-    //  days:day,
+       username: name,
      allDays
   })
 
@@ -65,19 +57,25 @@ const allDays = await waiters.getDays()
 
 app.post("/waiters/:username", async function(req,res){
 
- 
+  const days =  req.body.checks
     const name =  req.params.username
-    const days =  req.body.days
+  
 
- var waiter = await waiters.addWaiter(name);
+  // var waiter = await waiters.addWaiter(name);
 // var waiterId = await waiters.nameId(name);
+var allDays = await waiters.chosenDays()
+var picked = await waiters.selectedWorkingDays(days, name);
 
-var day = await waiters.selectWorkingDays(name, days);
-var allDays = await waiters.getDays()
-
+   if(picked) {
+    req.flash('success', 'shifts added')
+   }
+   else{
+    req.flash('error', 'Please select atleast 2 shifts and up')
+   }
+    
     res.render('waiters', {
-        username: waiter,
-       day,
+          username: name,
+          picked,
        allDays
     })
   
@@ -86,7 +84,7 @@ var allDays = await waiters.getDays()
 
 app.get("/days", async function(req, res){
 
-  var allNames = await waiters.tablesJoined()
+  var allNames = await waiters.getAdminId()
 var allDays = await waiters.getDays()
 
   res.render('days', {

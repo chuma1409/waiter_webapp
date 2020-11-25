@@ -28,6 +28,12 @@ VALUES ('Friday');
 INSERT INTO days (chosen_day)
 VALUES ('Saturday');
 
+
+ select chosen_day from availability 
+  join  days on availability.id_days = days.id 
+    join users on availability.id_user = users.id where username='mimmo';
+
+
 SELECT * FROM availability JOIN users ON availability.id_user = users.id JOIN days ON availability.id_days = days.id
 
 -- DELETE FROM users WHERE id=1;

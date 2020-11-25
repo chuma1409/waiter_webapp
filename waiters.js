@@ -2,76 +2,155 @@
 
 module.exports = function Waiters(pool) {
 
+    async function addShifts(name, days) {
+        await pool.query('delete from availability where id_user = $1', [name])
+        for (let i = 0; i < days.length; i++) {
+            const weekdayName = days[i];
+            var working_id = await shiftId(weekdayName)
+            await pool.query("insert into availability(id_user, id_days) values($1, $2)", [name, working_id])
+        }
+    }
+
+
+
     async function addWaiter(name) {
-        const waiter = await pool.query(`SELECT username FROM users  
-		WHERE username = $1`, [name]);
-        if (waiter.rowCount === 0) {
-           await pool.query(`INSERT INTO users(username) VALUES($1)`, [name]);
+
+        var checkName = await pool.query('select * from users where username = $1', [name])
+        if (checkName.rowCount === 0) {
+            await pool.query('insert into users(username) values ($1)', [name]);
         }
-        var f = await nameId(name)
-        console.log(f + " our side");
-    }
-
-    async function addDaysChosen(waiters, days){
-        
-        for(let i=0; i < days.length; i++){
-            var dayName = days[i];
-            console.log(dayName);
-            var shiftDays = await daysId(dayName)
-            await pool.query('INSERT INTO availability(id_user, id_days) VALUES($1, $2)', [waiters, shiftDays])
-        }
+        var idUser = await pool.query('select id from users where usernmae = $1', [name])
+        return idUser.rows[0].id
 
     }
 
-    async function daysId(days) {
-        var idDay = await pool.query('select id from days where chosen_day = $1', [days])
-        return idDay.rows[0].id;
-    }
-    async function nameId(name) {
-        var idName = await pool.query('select id from users where username = $1', [name])
-        return  idName.rows[0].id;;
-       
-    }
-    async function getDays(){
-        var list = await pool.query('select chosen_day from days')
-        return list.rows
-    }
-        async function getNames(){
-            var list = await pool.query('select username from users')
-            return list.rows
-        }
-    async function selectWorkingDays(waiter_id, dayId) {
-        var nId = await addWaiter(waiter_id)
 
-        console.log(nId + " Inside add days and waiter")
-        await pool.query('delete from availability where id_user = $1', [nId])
-        for (const day of dayId) {
-            console.log(dayId + " days");
-            var specificDay = await daysId(day)
-            console.log(specificDay);
-            for (const waiter of specificDay) {
-                await pool.query('INSERT INTO availability(id_user, id_days) VALUE($1, $2)', [nId, waiter.id_days])
+    async function selectedWorkingDays(days, name) {
+        try {
+            let waiterId = await getWaiterId(name)
+            if (waiterId) {
+                await addShifts(waiterId, days)
+            } else {
+                await addWaiter(name)
+                waiterId = await getWaiterId(name)
+                await addShifts(waiterId, days)
             }
+
+            return {}
+        } catch (error) {
+
+
+        }
+    }
+    async function shiftId(day) {
+
+        if (day) {
+            var dayQuery = await pool.query("select id from days where chosen_day = $1", [day])
+            let working_id = dayQuery.rows[0].id;
+            return working_id;
+        }
+    }
+    async function combined(id) {
+        try {
+            const combineDay = await pool.query('select chosen_day from availability join days on availaility.id_days = days.id join waiters on availability.id_user = users.id where id_user = $1 ORDER BY days.id ASC', [id])
+            // console.log(combineDay.rows + "inside get waiter");
+            return combineDay.rows
+
+        } catch (error) {
+
+
+        }
+    }
+    async function chosenDays(name) {
+        try {
+            const seven = await pool.query('select chosen_day from days')
+            const userId = await getWaiterId(name)
+            const shift = await combined(userId) || []
+
+            const rows = seven.rows
+            await rows.forEach(async (day) => {
+
+                day.users = []
+                day.checked = '';
+                shift.forEach(async (waiter) => {
+                    if (day.chosen_day === waiter.chosen_day) {
+                        day.checked = 'checked'
+
+                    }
+                    if (day.chosen_day === waiter.chosen_day) {
+                        day.users.push(waiter);
+                    }
+
+                })
+            })
+            return rows;
+        } catch (error) {
+        }
+    }
+    async function getDays() {
+        try {
+            const week = await pool.query('select chosen_day from days')
+            const shift = await getAdminId()
+            console.log(shift + "shift");
+
+            const list = week.rows
+            console.log(list);
+            await list.forEach(async (day) => {
+                day.users = []
+
+                shift.forEach(async (name) => {
+                    if (day.chosen_day === name.chosen_day) {
+                        day.users.push(name);
+                    }
+
+                    if (day.users.length === 3) {
+                        day.color = "green"
+                    }
+                    else if (day.users.length < 3) {
+                        day.color = "orange"
+                    }
+                    else if (day.users.length > 3) {
+                        day.color = "red"
+
+                    }
+                })
+            })
+            return list;
+
+        } catch (error) {
+
         }
 
-    
-    }
-    
-    async function tablesJoined(){
-        const shift = await pool.query('SELECT * FROM availability JOIN users ON availability.id_user = users.id JOIN days ON availability.id_days = days.id')
-return shift.rows
     }
 
- 
-    return {
-        tablesJoined,
-        addWaiter,
-        getNames,
-        selectWorkingDays,
-        getDays,
-        daysId,
-        nameId,
-        addDaysChosen
+    async function getAdminId() {
+
+        const joined = await pool.query('select chosen_day, username from availability join days on availability.id_days = days.id join users on availability.id_user = users.id ORDER BY days.id ASC')
+        return joined.rows
+    }
+
+
+    async function getWaiterId(name) {
+        try {
+            const idWaiter = await pool.query('select id from users where username = $1', [name])
+            var user_id = idWaiter.rows[0].id;
+            return user_id
+        } catch (error) {
+            return false
+        }
+    }
+
   
+
+    return {
+        shiftId,
+        addShifts,
+        addWaiter,
+        getDays,
+        getAdminId,
+        combined,
+        selectedWorkingDays,
+        chosenDays,
+        getWaiterId
     }
 }

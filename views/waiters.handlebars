@@ -1,22 +1,41 @@
 <div class="container">
     <h1>WAITERS APP</h1>
-    <form action="/waiters/{{username}}" method="POST">
+    {{!-- <form action="/waiters/{{username}}" method="POST"> --}}
 
- <div class="errMsg">{{messages.errMsg}}</div>
- <div class="checkbox">
+ {{!-- <div class="errMsg">{{messages.errMsg}}</div>
+ <div class="checkbox"> --}}
+  <h2 class="success"> {{messages.success}}</h2>
+        <h2 class="error">{{messages.error}}</h2>
+
+  <form action="/waiters/{{username}}" method="POST">
+
 
 {{#each allDays}}
 
-    <input type="checkbox" name="days" value="{{this.chosen_day}}">
-    <span>{{this.chosen_day}}</span>
-
-    {{/each}}
-  
+         <input type="checkbox" value="{{this.chosen_day}}"  {{checked}} class="check"  name="checks" >
+        <span class="check" > {{this.chosen_day}} </span>
     
-</div>
-  <input type="submit" value="Submit" class="btn">
+        {{/each}}
+        
+        <br>
+        <br>
+        <br>
+        <a href=""><button type="submit" class="btn">Submit</button></a>
 
     </form>
+ 
+   
+
+
+    <h1>{{username}}</h1>
   
+
 </div>
   
+<script>
+  setTimeout(function() {
+    document.querySelector('.success').innerHTML = ""; 
+    document.querySelector('.error').innerHTML = "";
+   
+  }, 3000);
+</script>

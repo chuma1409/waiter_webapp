@@ -36,3 +36,51 @@ body {
 	width: 80%;
 	text-align-last: center;
   }
+  .check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+   color:black;
+
+  }.li{
+  text-align:justify;
+}
+.green{
+  color: green;
+}
+.orange{
+  color: orange;
+}
+.red{
+  color: red;
+}
+h1{
+  color:black;
+}
+h2{
+ color:black;
+}
+  .success{
+	color: green;
+	  }
+	.error{
+	  color: red;
+	}
+	  span{
+		color: black;
+	  }
+  table, td, th {  
+    border: 1px solid black;
+    text-align: left;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 15px;
+  }

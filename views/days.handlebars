@@ -3,27 +3,29 @@
   
     <a href="/"><button type="button" class="backBtn">Back</button></a>
     <form action="/days" method="post">
+      <h3 class="green">3 waiters</h3>
+   <h3 class="orange">0-2 waiters</h3>
+    <h3 class="red">more than 3 waiters</h3>
+        <h1 class="success"> {{messages.success}}</h1>
     <div class="tables">
  <table>
     <thead>
   <tr>
      {{#each allDays}}
-    <th>{{this.chosen_day}}</th>
+    <th style="background-color: {{this.color}};">{{this.chosen_day}}</th>
     {{/each}}
   </tr>
-    </thead>
-    <tbody>
        <tr>
              {{#each allDays}}
              <td>
-                {{#each allNames}}
+                {{#each this.users}}
+                <ul>
                 {{this.username}}
+                </ul>
                 {{/each}}
              </td>
              {{/each}}
        </tr>
-    </tbody>
-
 </table>
 </div>
 </form>
