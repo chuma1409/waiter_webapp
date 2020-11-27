@@ -36,61 +36,56 @@ app.use(session({
 
 // initialise the flash middleware
 app.use(flash());
-app.get("/", async function(req, res){
-  // var allDays = await waiters.getDays()
-    res.render('waiters', {
-      // allDays
-    });
+app.get("/waiters/", async function (req, res) {
+
+  res.render('landing', {
+
+  });
 });
-app.get("/waiters/:username", async function(req, res){
-  
-  const name =  req.params.username
-  //  const days =  req.body.days
- 
-const allDays = await waiters.chosenDays(name)
+app.get("/waiters/:username", async function (req, res) {
+
+  const name = req.params.username
+  const allDays = await waiters.chosenDays(name)
   res.render('waiters', {
-       username: name,
-     allDays
+    username: name,
+    allDays
   })
 
-}) 
+})
 
-app.post("/waiters/:username", async function(req,res){
+app.post("/waiters/:username", async function (req, res) {
 
-  const days =  req.body.checks
-    const name =  req.params.username
-  
+  const days = req.body.checked
+  const name = req.params.username
 
-  // var waiter = await waiters.addWaiter(name);
-// var waiterId = await waiters.nameId(name);
-var allDays = await waiters.chosenDays()
-var picked = await waiters.selectedWorkingDays(days, name);
+  var allDays = await waiters.chosenDays()
+  var picked = await waiters.selectedWorkingDays(days, name);
 
-   if(picked) {
+  if (picked) {
     req.flash('success', 'shifts added')
-   }
-   else{
-    req.flash('error', 'Please select atleast 2 shifts and up')
-   }
-    
-    res.render('waiters', {
-          username: name,
-          picked,
-       allDays
-    })
-  
+  }
+  //  else{
+  //   req.flash('error', 'Please select atleast 2 shifts and up')
+  //  }
+
+  res.render('waiters', {
+    username: name,
+    picked,
+    allDays
+  })
+
 })
 
 
-app.get("/days", async function(req, res){
+app.get("/days", async function (req, res) {
 
   var allNames = await waiters.getAdminId()
-var allDays = await waiters.getDays()
+  var allDays = await waiters.getDays()
 
   res.render('days', {
     allNames,
     allDays
- 
+
   })
 
 })

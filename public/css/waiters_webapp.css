@@ -1,13 +1,13 @@
 .container {
 	margin: auto;
 	width: 80%;
-	background-color: bisque;
+	background-color: lightblue;
 	text-align-last: center;
 }
 body {
 	font-family: arial;
 	color:black;
-	background-color: burlywood;
+	background-color: gray;
   }
   input[type="text"] {
 	width: 15em;

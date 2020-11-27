@@ -91,10 +91,10 @@ module.exports = function Waiters(pool) {
         try {
             const week = await pool.query('select chosen_day from days')
             const shift = await getAdminId()
-            console.log(shift + "shift");
+         
 
             const list = week.rows
-            console.log(list);
+            // console.log(list);
             await list.forEach(async (day) => {
                 day.users = []
 

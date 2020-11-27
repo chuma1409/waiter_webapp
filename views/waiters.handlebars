@@ -1,9 +1,5 @@
 <div class="container">
     <h1>WAITERS APP</h1>
-    {{!-- <form action="/waiters/{{username}}" method="POST"> --}}
-
- {{!-- <div class="errMsg">{{messages.errMsg}}</div>
- <div class="checkbox"> --}}
   <h2 class="success"> {{messages.success}}</h2>
         <h2 class="error">{{messages.error}}</h2>
 
@@ -12,13 +8,10 @@
 
 {{#each allDays}}
 
-         <input type="checkbox" value="{{this.chosen_day}}"  {{checked}} class="check"  name="checks" >
+         <input type="checkbox" value="{{this.chosen_day}}"  {{checked}} class="check"  name="checked" >
         <span class="check" > {{this.chosen_day}} </span>
     
         {{/each}}
-        
-        <br>
-        <br>
         <br>
         <a href=""><button type="submit" class="btn">Submit</button></a>
 
