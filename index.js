@@ -91,7 +91,7 @@ app.get("/days", async function (req, res) {
 })
 app.get("/clear", async function(req, res){
   await waiters.resetBtn()
-  res.redirect("/")
+  res.redirect("/days")
 
 })
 
