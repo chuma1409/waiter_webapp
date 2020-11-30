@@ -19,7 +19,7 @@ module.exports = function Waiters(pool) {
         if (checkName.rowCount === 0) {
             await pool.query('insert into users(username) values ($1)', [name]);
         }
-        var idUser = await pool.query('select id from users where usernmae = $1', [name])
+        var idUser = await pool.query('select id from users where username = $1', [name])
         return idUser.rows[0].id
 
     }
@@ -91,7 +91,7 @@ module.exports = function Waiters(pool) {
         try {
             const week = await pool.query('select chosen_day from days')
             const shift = await getAdminId()
-         
+
 
             const list = week.rows
             // console.log(list);
@@ -139,8 +139,14 @@ module.exports = function Waiters(pool) {
             return false
         }
     }
-
-  
+    async function getAllNames() {
+        var names = await pool.query('select username from users')
+        return names
+    }
+async function resetBtn(){
+    var clear = await pool.query('delete from availability')
+    return clear
+}
 
     return {
         shiftId,
@@ -151,6 +157,8 @@ module.exports = function Waiters(pool) {
         combined,
         selectedWorkingDays,
         chosenDays,
-        getWaiterId
+        getWaiterId,
+        getAllNames,
+        resetBtn
     }
 }

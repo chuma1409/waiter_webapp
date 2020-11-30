@@ -64,9 +64,9 @@ app.post("/waiters/:username", async function (req, res) {
   if (picked) {
     req.flash('success', 'shifts added')
   }
-  //  else{
-  //   req.flash('error', 'Please select atleast 2 shifts and up')
-  //  }
+   else{
+    req.flash('error', 'Please select atleast 2 shifts and up')
+   }
 
   res.render('waiters', {
     username: name,
@@ -87,6 +87,11 @@ app.get("/days", async function (req, res) {
     allDays
 
   })
+
+})
+app.get("/clear", async function(req, res){
+  await waiters.resetBtn()
+  res.redirect("/")
 
 })
 
